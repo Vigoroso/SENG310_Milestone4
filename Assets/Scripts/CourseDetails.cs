@@ -9,6 +9,7 @@ public class CourseDetails : MonoBehaviour
     public Semester semester = Semester.Fall;
     public Text semesterText;
     public Text courseText;
+    public Text descriptionText;
 
     public void Awake()
     {
@@ -20,5 +21,6 @@ public class CourseDetails : MonoBehaviour
     {
         rect.position = trigger.position;
         courseText.text = course.department + " " + course.number;
+        descriptionText.text = course.description;
     }
 }

@@ -10,8 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b38bf8f79480a4ea1e52b83881ac78, type: 3}
-  m_Name: new Course
+  m_Name: Foundations of Computer Science
   m_EditorClassIdentifier: 
   number: 110
   department: 0
   description: This is the description of a course.
+  mean:
+    attribute: Mean
+    score: 0
+    scoreMin: 0
+    scoreMax: 0
+  hoursPerWeek:
+    attribute: Hourse Per Week
+    score: 0
+    scoreMin: 0
+    scoreMax: 0
+  difficulty:
+    attribute: Difficulty
+    score: 0
+    scoreMin: 0
+    scoreMax: 0

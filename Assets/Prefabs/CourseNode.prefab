@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5874417768030891248}
   - component: {fileID: 3865962318851248574}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,13 +88,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8776376160672769790}
+  - component: {fileID: 1161908414525603261}
   - component: {fileID: 6875091732557144800}
   - component: {fileID: 2449270474655895016}
   - component: {fileID: 4118195269552938502}
-  - component: {fileID: 1161908414525603261}
   - component: {fileID: 8143207127408627802}
   m_Layer: 5
-  m_Name: Course
+  m_Name: CourseNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,6 +120,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 256, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1161908414525603261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6847243666119993582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f22fa4ee0ceb8f499fe56d6d449ae42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  course: {fileID: 11400000, guid: 4e9e3849255463a44b293292929f5817, type: 2}
+  title: {fileID: 3865962318851248574}
 --- !u!222 &6875091732557144800
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -177,20 +191,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &1161908414525603261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6847243666119993582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f22fa4ee0ceb8f499fe56d6d449ae42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  course: {fileID: 0}
-  text: {fileID: 0}
 --- !u!114 &8143207127408627802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,18 +207,7 @@ MonoBehaviour:
   - eventID: 0
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []

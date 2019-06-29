@@ -7,11 +7,11 @@ using UnityEngine.EventSystems;
 public class CourseNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Course course;
-    public Text text;
+    public Text title;
 
     private void Awake()
     {
-        text.text = course.department.ToString() + " " + course.number;
+        title.text = course.department.ToString() + " " + course.number;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

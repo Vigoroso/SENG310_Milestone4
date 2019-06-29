@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Foldout.cs" />
     <Compile Include="Assets\Scripts\HoverDetails.cs" />
     <Compile Include="Assets\Scripts\MainPanel.cs" />
+    <Compile Include="Assets\Scripts\Major.cs" />
     <Compile Include="Assets\Scripts\RadarChart.cs" />
     <Compile Include="Assets\Scripts\SidePanel.cs" />
     <Compile Include="Assets\Scripts\Tooltip.cs" />

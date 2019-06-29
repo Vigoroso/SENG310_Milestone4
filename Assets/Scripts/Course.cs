@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new_Course", menuName = "Course")]
+[System.Serializable]
 public class Course : ScriptableObject
 {
     public int number;
@@ -26,6 +27,7 @@ public enum Department
     STAT
 }
 
+[System.Serializable]
 public class CourseMetric
 {
     public string attribute;
