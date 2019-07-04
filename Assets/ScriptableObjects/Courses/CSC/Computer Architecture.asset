@@ -12,24 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b38bf8f79480a4ea1e52b83881ac78, type: 3}
   m_Name: Computer Architecture
   m_EditorClassIdentifier: 
-  number: 0
-  level: 0
-  subject: 0
-  description: 
-  prereqs: []
-  mean:
-    attribute: 
-    score: 0
-    scoreMin: 0
-    scoreMax: 0
-  hoursPerWeek:
-    attribute: 
-    score: 0
-    scoreMin: 0
-    scoreMax: 0
-  difficulty:
-    attribute: 
-    score: 0
-    scoreMin: 0
-    scoreMax: 0
-  tags: []

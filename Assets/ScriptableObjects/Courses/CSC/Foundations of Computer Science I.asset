@@ -12,26 +12,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b38bf8f79480a4ea1e52b83881ac78, type: 3}
   m_Name: Foundations of Computer Science I
   m_EditorClassIdentifier: 
-  number: 110
-  level: 2
-  subject: 1
-  description: Introduction to designing, implementing, and understanding computer
-    programs using an object-oriented programming language. Topics include an introduction
-    to computing and problem solving, selection and iteration, arrays and collections,
-    objects and classes, top-down design and incremental development.
-  mean:
-    attribute: Mean
-    score: 0
-    scoreMin: 0
-    scoreMax: 0
-  hoursPerWeek:
-    attribute: Hours Per Week
-    score: 0
-    scoreMin: 0
-    scoreMax: 0
-  difficulty:
-    attribute: Difficulty
-    score: 0
-    scoreMin: 0
-    scoreMax: 0
-  tags: []
