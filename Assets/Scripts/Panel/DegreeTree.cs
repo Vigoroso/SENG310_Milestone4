@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
 
 public class DegreeTree : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class DegreeTree : MonoBehaviour
     [Header("Prefabs")]
     public GameObject treeColumn;
     public CourseNode courseNode;
-    public Image linePrefab;
+    public UILineRenderer linePrefab;
 
     bool initialized;
 
@@ -58,6 +59,7 @@ public class DegreeTree : MonoBehaviour
         {
             if(c.prereqs.Count == 0)
             {
+                Debug.Log("Add " + c.name);
                 current.Add(c);
                 AddNode(c, 0);
             }
@@ -68,6 +70,8 @@ public class DegreeTree : MonoBehaviour
                 {
                     for(int i = 0; i < prereq.equivalent.Count; i++)
                     {
+                        Debug.Log(prereq.equivalent[i].name + " in tree?");
+
                         if (current.Contains(prereq.equivalent[i]))
                             break;
 
@@ -78,11 +82,13 @@ public class DegreeTree : MonoBehaviour
 
                 if (skip)
                 {
+                    Debug.Log("Skip " + c.name);
                     pending.Add(c);
                     continue;
                 }
                 else
                 {
+                    Debug.Log("Add " + c.name);
                     AddNode(c, 1);
                 }
             }
@@ -92,14 +98,25 @@ public class DegreeTree : MonoBehaviour
         do
         {
             prevCount = pending.Count;
+            List<Course> removeMe = new List<Course>();
             foreach (Course c in pending)
             {
                 ResolvePrereqs();
                 current.Add(c);
+                removeMe.Add(c);
+            }
+
+            foreach(Course c in removeMe)
+            {
                 pending.Remove(c);
             }
+
+            removeMe.Clear();
         }
         while (pending.Count != prevCount && pending.Count > 0);
+
+        foreach (Course c in pending)
+            Debug.Log(c.name + " pending");
 
         initialized = true;
     }
@@ -146,7 +163,8 @@ public class DegreeTree : MonoBehaviour
     void AddColumn()
     {
         GameObject tc = Instantiate(treeColumn);
-        tc.transform.SetParent(content);
+        tc.transform.SetParent(content, false);
+        //tc.transform.localScale = Vector3.one;
         columns.Add(tc);
         tc.transform.position = Vector3.zero;
     }
@@ -163,7 +181,7 @@ public class DegreeTree : MonoBehaviour
     {
         CourseNode cn = Instantiate(courseNode);
         cn.SetCourse(course);
-        cn.transform.SetParent(columns[columnID].transform);
+        cn.transform.SetParent(columns[columnID].transform, false);
         cn.column = columns[columnID].GetComponent<RectTransform>();
         cn.columnID = columnID;
         nodes.Add(cn);
@@ -188,45 +206,19 @@ public class DegreeTree : MonoBehaviour
 
     void DrawLine(CourseNode start, CourseNode end)
     {
-        Texture2D tex = new Texture2D(lineResolution.x, lineResolution.y, TextureFormat.RGBA32, false);
+        GameObject go = Instantiate(linePrefab.gameObject);
 
-        float dx = end.GetComponent<RectTransform>().position.x - start.GetComponent<RectTransform>().position.x;
-        float dy = end.GetComponent<RectTransform>().position.y - start.GetComponent<RectTransform>().position.y;
+        go.transform.SetParent(lineContainer.GetComponent<RectTransform>(), false);
 
-        dy /= lineResolution.y;
+        UILineRenderer line = go.GetComponent<UILineRenderer>();
+        line.enabled = true;
+        //Vector2[] endpoints = new Vector2[] { (Vector2)start.rect.position, (Vector2)end.rect.position };
+        //line.Points = endpoints;
 
-        int curY = start.GetComponent<RectTransform>().position.y <= end.GetComponent<RectTransform>().position.y ?
-                0 : lineResolution.y;
+        UILineConnector connector = line.GetComponent<UILineConnector>();
+        connector.transforms = new RectTransform[] { start.rect, end.rect };
+        connector.enabled = true;
 
-        for(int x = 0; x < lineResolution.x; x++)
-        {
-            curY = curY + Mathf.FloorToInt(x * dy);
-            tex.SetPixel(x, curY, lineColour);
-
-            for(int y = 0; y < lineResolution.y; y++)
-            {
-                if (curY == y)
-                    continue;
-
-                tex.SetPixel(x, y, Color.clear);
-            }
-        }
-
-        tex.Apply();
-
-        Image line = Instantiate(linePrefab);
-        line.sprite  = Sprite.Create(tex, line.rectTransform.rect, new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(tex.width, tex.height));
-        line.color = lineColour;
-        line.transform.SetParent(lineContainer);
-
-        RectTransform rect = line.GetComponent<RectTransform>();
-
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-
-        rect.position = 0.5f * (end.rect.position + start.rect.position) + new Vector3(750, 750, 0);
-
-        //need to determine height per item
-        rect.sizeDelta = new Vector2(450f * (end.columnID - start.columnID), 32f);
+        //line.transform.position = Vector3.zero;
     }
 }
