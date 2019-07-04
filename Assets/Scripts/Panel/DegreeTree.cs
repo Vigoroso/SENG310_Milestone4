@@ -64,10 +64,16 @@ public class DegreeTree : MonoBehaviour
             else
             {
                 bool skip = false;
-                foreach(Course p in c.prereqs)
+                foreach(Prereq prereq in c.prereqs)
                 {
-                    if (!current.Contains(p))
-                        skip = true;
+                    for(int i = 0; i < prereq.equivalent.Count; i++)
+                    {
+                        if (current.Contains(prereq.equivalent[i]))
+                            break;
+
+                        if (i == prereq.equivalent.Count - 1)
+                            skip = true;
+                    }
                 }
 
                 if (skip)
@@ -118,18 +124,21 @@ public class DegreeTree : MonoBehaviour
 
     public void ResolvePrereqs(Course c)
     {
-        foreach (Course p in c.prereqs)
+        foreach (Prereq prereq in c.prereqs)
         {
-            if (!current.Contains(p))
+            for (int i = 0; i < prereq.equivalent.Count; i++)
             {
-                if (p.prereqs.Count == 0)
+                if (!current.Contains(prereq.equivalent[i]))
                 {
-                    AddNode(p, 0);
-                }
-                else
-                    ResolvePrereqs(p);
+                    if (prereq.equivalent[i].prereqs.Count == 0)
+                    {
+                        AddNode(prereq.equivalent[i], 0);
+                    }
+                    else
+                        ResolvePrereqs(prereq.equivalent[i]);
 
-                current.Add(p);
+                    current.Add(prereq.equivalent[i]);
+                }
             }
         }
     }
@@ -161,13 +170,16 @@ public class DegreeTree : MonoBehaviour
 
         if(cn.course.prereqs.Count > 0)
         {
-            foreach(Course c in cn.course.prereqs)
+            foreach(Prereq prereq in cn.course.prereqs)
             {
-                foreach(CourseNode node in nodes)
+                foreach(Course c in prereq.equivalent)
                 {
-                    if(node.course == c)
+                    foreach (CourseNode node in nodes)
                     {
-                        DrawLine(node, cn);
+                        if (node.course == c)
+                        {
+                            DrawLine(node, cn);
+                        }
                     }
                 }
             }
@@ -216,19 +228,5 @@ public class DegreeTree : MonoBehaviour
 
         //need to determine height per item
         rect.sizeDelta = new Vector2(450f * (end.columnID - start.columnID), 32f);
-
-        /*rect.sizeDelta = (RectTransformUtility.WorldToScreenPoint(null, end.rect.position)
-                        - RectTransformUtility.WorldToScreenPoint(null, start.rect.position));*/
-
-        /*if (start.rect.position.y <= end.rect.position.y)
-        {
-            rect.offsetMin = start.rect.position;
-            rect.offsetMax = end.rect.position;
-        }
-        else
-        {
-            rect.offsetMin = new Vector2(start.rect.position.x, end.rect.position.y);
-            rect.offsetMax = new Vector2(end.rect.position.x, start.rect.position.y);
-        }*/
     }
 }

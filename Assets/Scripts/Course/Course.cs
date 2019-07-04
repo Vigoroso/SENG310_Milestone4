@@ -12,13 +12,19 @@ public class Course : ScriptableObject
     [TextArea]
     public string description;
 
-    public List<Course> prereqs;
+    public List<Prereq> prereqs;
 
     public CourseMetric mean;
     public CourseMetric hoursPerWeek;
     public CourseMetric difficulty;
 
     public List<string> tags;
+}
+
+[System.Serializable]
+public class Prereq
+{
+    public List<Course> equivalent;
 }
 
 [System.Serializable]
