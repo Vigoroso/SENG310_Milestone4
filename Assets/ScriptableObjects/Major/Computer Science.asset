@@ -24,6 +24,7 @@ MonoBehaviour:
     count: 0
   firstYearCore:
   - {fileID: 11400000, guid: 4e9e3849255463a44b293292929f5817, type: 2}
+  - {fileID: 11400000, guid: 616b28510649a664a9497f846abc6055, type: 2}
   firstYearRecommended: []
   secondYearCore: []
   secondYearRecommended: []

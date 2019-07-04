@@ -13,6 +13,8 @@ public class MainPanel : MonoBehaviour
 
     public List<GameObject> content;
 
+    public mono_gmail mailLog;
+
     public int contentID;
 
     private void Awake()
@@ -22,6 +24,9 @@ public class MainPanel : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        mailLog.log = "";
+        //mailLog.SendMail("Test", "Do we have success?");
 
         instance = this;
         rect = GetComponent<RectTransform>();

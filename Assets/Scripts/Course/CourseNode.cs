@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(RectTransform))]
 public class CourseNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Course course;
     public Text title;
+    public HoverPreset hoverPreset;
+    public RectTransform rect;
+    public RectTransform column;
+    public int columnID;
 
     private void Awake()
     {
+        rect = GetComponent<RectTransform>();
         title.text = course.subject.ToString() + " " + course.number;
     }
 
@@ -35,5 +41,11 @@ public class CourseNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             yield break;
 
         MainPanel.instance.hoverDetails.gameObject.SetActive(false);
+    }
+
+    public void SetCourse(Course course)
+    {
+        this.course = course;
+        title.text = course.subject + " " + course.number;
     }
 }

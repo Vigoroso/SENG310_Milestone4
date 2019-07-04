@@ -49,6 +49,8 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
 
     public void FindCourses()
     {
+
+
         prompt.SetActive(false);
         MainPanel.instance.hoverDetails.transform.SetParent(MainPanel.instance.transform);
 

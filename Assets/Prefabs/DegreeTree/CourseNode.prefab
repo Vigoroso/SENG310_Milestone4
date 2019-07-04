@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   course: {fileID: 11400000, guid: 4e9e3849255463a44b293292929f5817, type: 2}
   title: {fileID: 3865962318851248574}
+  hoverPreset: {fileID: 11400000, guid: 358ea6ac34500574b9c48b332659a360, type: 2}
 --- !u!222 &6875091732557144800
 CanvasRenderer:
   m_ObjectHideFlags: 0
