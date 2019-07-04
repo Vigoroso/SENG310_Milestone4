@@ -1,0 +1,2 @@
+D:\seng310prototype\SENG310_Milestone4\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+D:\seng310prototype\SENG310_Milestone4\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
