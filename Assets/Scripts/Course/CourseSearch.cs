@@ -118,12 +118,12 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
             Filter(courseDB.mathOffering);
             Filter(courseDB.sengOffering);
             Filter(courseDB.statOffering);
-            Filter(courseDB.psych);
-            Filter(courseDB.phil);
-            Filter(courseDB.engl);
-            Filter(courseDB.engr);
-            Filter(courseDB.medi);
-            Filter(courseDB.gree);
+            Filter(courseDB.psychOffering);
+            Filter(courseDB.philOffering);
+            Filter(courseDB.englOffering);
+            Filter(courseDB.engrOffering);
+            Filter(courseDB.mediOffering);
+            Filter(courseDB.greeOffering);
         }
     }
 
