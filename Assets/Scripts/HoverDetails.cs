@@ -9,7 +9,6 @@ public class HoverDetails : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 {
     public RectTransform rect;
 
-
     public float offsetScale = 200f;
 
     public Image image;
@@ -37,6 +36,8 @@ public class HoverDetails : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     int sectionIndex;
 
+    List<RectTransform> spacer = new List<RectTransform>();
+
     public void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -60,6 +61,16 @@ public class HoverDetails : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         hasFocus = false;
         //offerings.Clear();
         gameObject.SetActive(!disableOnExit);
+
+        ClearSpacer();
+    }
+
+    private void OnDestroy()
+    {
+        foreach (RectTransform rt in spacer)
+            Debug.Log("spacer.name = " + rt.name);
+
+        Debug.Log("HoverDetails.parent = " + rect.parent);
     }
 
     public void PopulateOfferings()
@@ -71,7 +82,26 @@ public class HoverDetails : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                 offerings.Add(co);
         }
     }
-    
+
+    public void ClearSpacer()
+    {
+        if (spacer.Count > 0)
+        {
+            for (int i = spacer.Count - 1; i > -1; i--)
+            {
+                if (spacer[i] == rect)
+                    continue;
+
+                if (spacer[i])
+                {
+                    Destroy(spacer[i].gameObject);
+                }
+            }
+
+            spacer.Clear();
+        }
+    }
+
     public void SetDetails()
     {
         if(offerings.Count == 0)
@@ -124,27 +154,39 @@ public class HoverDetails : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (hasFocus && currentCourse == course)
             return;
 
-        currentCourse = course.course.course;
+        int side = 0;
 
-        preset = course.hoverPreset;
+        ClearSpacer();
 
-        if(preset != null)
+        if (Input.mousePosition.x <= Screen.width / 2)
         {
-            image.color = preset.colour;
-            image.sprite = preset.sprite;
-            image.type = preset.imageType;
-
-            contentSizeFitter.horizontalFit = preset.horizontalFit;
-            contentSizeFitter.verticalFit = preset.verticalFit;
-            verticalLayoutGroup.spacing = preset.spacing;
-
             rect.anchorMin = preset.anchorMin;
             rect.anchorMax = preset.anchorMax;
+            transform.SetParent(course.column.transform, false);
+        }
+        else
+        {
+            hasFocus = true;
 
-            transform.SetParent(course.column.transform);
-            //transform.position = preset.offset;
-            rect.offsetMax = Vector2.zero;
-            rect.offsetMin = Vector2.zero;
+            rect.anchorMin = new Vector2(CourseSearch.instance.hoverAnchorOffsets[CourseSearch.instance.columns.Count - 1]
+                                         + preset.anchorMin.x, preset.anchorMin.y);
+            rect.anchorMax = new Vector2(CourseSearch.instance.hoverAnchorOffsets[CourseSearch.instance.columns.Count - 1]
+                                         + preset.anchorMax.x, preset.anchorMax.y);
+
+            side = -1;
+
+            int id = CourseSearch.instance.columns.IndexOf(course.column.GetComponent<RectTransform>()) - 1;
+
+            transform.SetParent(CourseSearch.instance.columns[id], false);
+        }
+
+        currentCourse = course.course.course;
+
+        for (int i = 0; i < (CourseSearch.instance.columns.Count >= 7 ? 2 : 1); i++)
+        {
+            spacer.Add(Instantiate(new GameObject()).AddComponent<RectTransform>());
+            spacer[i].transform.SetParent(CourseSearch.instance.columnSpace.transform, false);
+            spacer[i].transform.SetSiblingIndex(course.column.transform.GetSiblingIndex() + 1 + side);
         }
 
         SetDetails(course.course);
@@ -160,6 +202,7 @@ public class HoverDetails : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         this.preset = preset;
 
+        GetComponent<LayoutElement>().ignoreLayout = preset.ignoreLayout;
         disableOnExit = preset.disableOnExit;
 
         image.color = preset.colour;

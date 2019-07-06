@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "new_HoverPreset", menuName = "Hover Preset")]
 public class HoverPreset : ScriptableObject
 {
+    public bool ignoreLayout = true;
     public bool disableOnExit = true;
     [Header("Appearance")]
     public Color colour = Color.white;

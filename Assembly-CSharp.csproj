@@ -60,7 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\AddKeyword.cs" />
     <Compile Include="Assets\Scripts\Course\Course.cs" />
     <Compile Include="Assets\Scripts\Course\CourseDB.cs" />
     <Compile Include="Assets\Scripts\Course\CourseDetails.cs" />
@@ -70,10 +69,10 @@
     <Compile Include="Assets\Scripts\Course\CourseSearch.cs" />
     <Compile Include="Assets\Scripts\DegreeTree\DegreeTree.cs" />
     <Compile Include="Assets\Scripts\DegreeTree\TreeColumn.cs" />
-    <Compile Include="Assets\Scripts\DeleteObject.cs" />
     <Compile Include="Assets\Scripts\Foldout.cs" />
     <Compile Include="Assets\Scripts\HoverDetails.cs" />
     <Compile Include="Assets\Scripts\HoverPreset.cs" />
+    <Compile Include="Assets\Scripts\Keyword.cs" />
     <Compile Include="Assets\Scripts\LevelToggle.cs" />
     <Compile Include="Assets\Scripts\Major.cs" />
     <Compile Include="Assets\Scripts\mono_gmail.cs" />

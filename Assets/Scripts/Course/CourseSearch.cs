@@ -7,18 +7,18 @@ using System.Text.RegularExpressions;
 
 public class CourseSearch : MonoBehaviour, IPointerEnterHandler
 {
-
     public static CourseSearch instance;
 
     public CourseDB courseDB;
+
+    public HoverPreset hoverPreset;
 
     [Header("CurrentResults")]
     public List<CourseOffering> offerings;
     public List<Course> courses;
 
     [Header("Sidebar")]
-    //do union / intersect for tags?
-    public List<string> tags;
+    public InputField keywordInput;
     public GameObject keywordContentParent;
     public List<Subject> subjects;
     public List<Level> levels;
@@ -28,10 +28,13 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
     [Header("MainPanel")]
     public GameObject columnSpace;
     public GameObject prompt;
+    public List<RectTransform> columns = new List<RectTransform>();
+    public float[] hoverAnchorOffsets = new float[10] { 0, 0, .56f, .5f, .4f, .35f, .25f, .15f, .15f, .15f };
 
     [Header("Prefabs")]
     public ResultColumn column;
     public CourseResult courseResult;
+    public Keyword keyword;
 
     void Awake()
     {
@@ -45,6 +48,11 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
         offerings = new List<CourseOffering>();
     }
 
+    public void OnEnable()
+    {
+        MainPanel.instance.hoverDetails.SetPreset(hoverPreset);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         MainPanel.instance.hoverDetails.ClearDetails();
@@ -52,18 +60,17 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
 
     public void FindCourses()
     {
-
-
         prompt.SetActive(false);
         MainPanel.instance.hoverDetails.transform.SetParent(MainPanel.instance.transform);
 
         offerings.Clear();
         courses.Clear();
+        columns.Clear();
 
         //check if criteria is dirty?
 
         //clear columns
-        for(int i = 0; i < columnSpace.transform.childCount; i++)
+        for (int i = 0; i < columnSpace.transform.childCount; i++)
         {
             Destroy(columnSpace.transform.GetChild(i).gameObject);
         }
@@ -78,18 +85,6 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
                     case Subject.CSC:
                         Filter(courseDB.cscOffering);
                         break;
-
-                    case Subject.MATH:
-                        Filter(courseDB.mathOffering);
-                        break;
-
-                    case Subject.SENG:
-                        Filter(courseDB.sengOffering);
-                        break;
-
-                    case Subject.STAT:
-                        Filter(courseDB.statOffering);
-                        break;
                     case Subject.ENGL:
                         Filter(courseDB.englOffering);
                         break;
@@ -98,6 +93,9 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
                         break;
                     case Subject.GREE:
                         Filter(courseDB.greeOffering);
+                        break;
+                    case Subject.MATH:
+                        Filter(courseDB.mathOffering);
                         break;
                     case Subject.MEDI:
                         Filter(courseDB.mediOffering);
@@ -108,6 +106,12 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
                     case Subject.PSYCH:
                         Filter(courseDB.psychOffering);
                         break;
+                    case Subject.SENG:
+                        Filter(courseDB.sengOffering);
+                        break;
+                    case Subject.STAT:
+                        Filter(courseDB.statOffering);
+                        break;
                 }
             }
         }
@@ -115,22 +119,40 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
         {
             //filter through all subjects
             Filter(courseDB.cscOffering);
+            Filter(courseDB.englOffering);
+            Filter(courseDB.engrOffering);
+            Filter(courseDB.greeOffering);
             Filter(courseDB.mathOffering);
+            Filter(courseDB.mediOffering);
+            Filter(courseDB.philOffering);
+            Filter(courseDB.psychOffering);
             Filter(courseDB.sengOffering);
             Filter(courseDB.statOffering);
+<<<<<<< HEAD
             Filter(courseDB.psychOffering);
             Filter(courseDB.philOffering);
             Filter(courseDB.englOffering);
             Filter(courseDB.engrOffering);
             Filter(courseDB.mediOffering);
             Filter(courseDB.greeOffering);
+=======
+>>>>>>> 5d3053b211b79e76d7ea59e336f572c78757104a
         }
+
+        int spacing = -2500 + 300 * columns.Count;
+        if (spacing > 0)
+            spacing = 0;
+
+        columnSpace.GetComponent<HorizontalLayoutGroup>().spacing = spacing;
     }
 
     public void Filter(List<CourseOffering> subjectCourses)
     {
+        offerings.Clear();
+
         if (subjectCourses.Count <= 0)
         {
+            Debug.Log("No courses for subject :(");
             //write a message?
             return;
         }
@@ -159,6 +181,7 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
         }
         else
         {
+            Debug.Log("no toggles on!");
             //show message to choose semester
             return;
         }
@@ -166,12 +189,14 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
         //List<Course> courses = new List<Course>();
         //List<CourseOffering> offerings = new List<CourseOffering>();
 
-        List<GameObject> keywords = new List<GameObject>();
+        List<Keyword> keywords = new List<Keyword>();
 
         for(int i = 0; i < keywordContentParent.transform.childCount; i++)
         {
-            keywords.Add(keywordContentParent.transform.GetChild(i).gameObject);
+            keywords.Add(keywordContentParent.transform.GetChild(i).GetComponent<Keyword>());
         }
+
+        Debug.Log(keywords.Count);
 
         foreach (CourseOffering c in subjectCourses)
         {
@@ -182,20 +207,14 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
                 continue;
 
             bool skip = true;
-            /*
-            foreach (string t in tags)
+            foreach(Keyword k in keywords)
             {
-                if (c.course.tags.Contains(t))
+                Debug.Log("Looking for  '" + k.keyword.text + "' in: " + c.course.description + " and " + c.course.name);
+
+                if (Regex.IsMatch(c.course.description, k.keyword.text, RegexOptions.IgnoreCase)
+                    || Regex.IsMatch(c.course.name, k.keyword.text, RegexOptions.IgnoreCase) )
                 {
-                    skip = false;
-                    break;
-                }
-            }
-            */
-            foreach(GameObject k in keywords)
-            {
-                if(Regex.IsMatch(k.GetComponent<Text>().text, c.course.description, RegexOptions.IgnoreCase))
-                {
+                    Debug.Log("Matched " + k.keyword.text);
                     skip = false;
                     break;
                 }
@@ -212,6 +231,7 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
         if (offerings.Count > 0)
         {
             ResultColumn rColumn = Instantiate(column);
+            columns.Add(rColumn.GetComponent<RectTransform>());
             rColumn.transform.SetParent(columnSpace.transform, false);
 
             List<Course> temp = new List<Course>();
@@ -246,4 +266,23 @@ public class CourseSearch : MonoBehaviour, IPointerEnterHandler
         else
             levels.Add(level.level);
     }
+
+    public void AddKeyword()
+    {
+        foreach (Keyword k in keywordContentParent.GetComponentsInChildren<Keyword>())
+        {
+            if (k.keyword.text == keywordInput.text)
+            {
+                keywordInput.text = "";
+                return;
+            }
+        }
+
+        Keyword keyword = Instantiate(this.keyword);
+        keyword.keyword.text = keywordInput.text;
+        keyword.transform.SetParent(keywordContentParent.transform, false);
+
+        keywordInput.text = "";
+    }
+
 }
